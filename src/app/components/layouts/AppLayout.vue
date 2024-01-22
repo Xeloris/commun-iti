@@ -2,12 +2,15 @@
 import LeftMenu from "@/app/components/domain/menu/LeftMenu.vue";
 import RightMenu from "@/app/components/domain/menu/RightMenu.vue";
 import MessageInput from "@/app/components/domain/message/MessageInput.vue";
-import { useProvider, useState } from "@/app/platform";
+import Room from "@/app/components/domain/room/Room.vue";
+import { useProvider, useState, useStore } from "@/app/platform";
 import { AuthenticationStore } from "@/modules/authentication/store/AuthenticationStore";
 import { WebsocketConnection } from "@/modules/infrastructure/socket";
+import { RoomStore } from "@/modules/room/store";
 
 const [socketConnection] = useProvider([WebsocketConnection]);
 const authState = useState(AuthenticationStore);
+const store = useStore(RoomStore);
 
 if (authState.token?.bearer) {
   socketConnection.connect(authState.token?.bearer);
@@ -23,7 +26,7 @@ if (authState.token?.bearer) {
 
     <main>
       <main>
-        <!-- TODO -->
+        <room v-if="store.state.currentRoom" :room="store.state.currentRoom" />
       </main>
 
       <footer>
@@ -40,22 +43,22 @@ if (authState.token?.bearer) {
 .app-layout {
   display: flex;
 
-  > aside {
+  >aside {
     width: var.$layout-left-menu-width;
     height: 100%;
     background-color: var.$color-primary-darker;
   }
 
-  > main {
+  >main {
     flex: 1;
     display: flex;
     flex-direction: column;
 
-    > main {
+    >main {
       flex: 1;
     }
 
-    > footer {
+    >footer {
       height: var.$layout-footer-height;
     }
   }

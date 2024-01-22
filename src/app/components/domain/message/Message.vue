@@ -33,6 +33,7 @@ function onEmojiPicked(emoji: string) {
     <div class="message-content">
       <div class="message-title">
         <small class="message-date"></small>
+        <RichText :text="props.message.text" />
       </div>
 
     </div>

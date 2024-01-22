@@ -47,7 +47,7 @@ watch(
 );
 
 function subscribeToIncomingMessage() {
-  
+
 }
 
 async function fetchMore() {
@@ -59,6 +59,7 @@ async function fetchMore() {
     loading.value = true;
 
     // TODO fetch more messages
+    await messageSerivce.fetchMore(props.room.id);
   } catch (e) {
     console.error(e);
   } finally {
@@ -70,7 +71,9 @@ async function fetchMore() {
 <template>
   <div class="room stretch-wh" ref="root">
     <div class="room-container" ref="container">
-      <div ref="top"></div>
+      <Message v-for="item in store.state.currentRoomMessages" :key="item.id" :message="item" />
+      <div ref="top">
+      </div>
     </div>
   </div>
 </template>
@@ -81,6 +84,7 @@ async function fetchMore() {
   flex-direction: column-reverse;
   overflow-y: auto;
 }
+
 .room-container {
   display: flex;
   flex-direction: column-reverse;
