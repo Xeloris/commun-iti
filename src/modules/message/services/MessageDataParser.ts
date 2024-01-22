@@ -28,7 +28,11 @@ export class MessageDataParser {
   }
 
   private replaceNewLines(text: RichText) {
-    return text; // TODO
+    for (const token of text.tokens) {
+      if (token.type !== "rich") continue;
+      token.value = token.value.replace("\n", "</br>");
+    }
+    return text;
   }
 
   extractAttachements(text: RichText): MessageAttachement[] {
