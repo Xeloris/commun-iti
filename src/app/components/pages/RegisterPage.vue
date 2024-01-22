@@ -3,11 +3,11 @@ import { ElMessage } from "element-plus";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import { UserAPI } from "@/modules/user/services";
-import { AuthenticationService } from "@/modules/authentication/services";
 import { useProvider } from "@/app/platform";
 import type { FormRules, FormInstance } from "element-plus";
+import type { UserRegistrationModel } from "@/modules/user/models";
 
-const [userApi, authService] = useProvider([UserAPI, AuthenticationService]);
+const [userApi] = useProvider([UserAPI]);
 const router = useRouter();
 
 const registerModel = reactive({
@@ -23,19 +23,61 @@ const registerFormRules = reactive<FormRules>({
     {
       required: true,
       message: "Pseudo obligatoire"
-    }
+    },
+    {
+      pattern: userNameRegex,
+      message: "Le pseudo doit correspondre a la regex"
+    },
   ],
-  password: [],
-  passwordConfirmation: []
+  password: [
+    {
+      required: true,
+      message: "Mot de passe obligatoire"
+    },
+  ],
+  passwordConfirmation: [
+    {
+      required: true,
+      message: "Mot de passe obligatoire"
+    },
+  ]
 });
 
 async function onSubmit(form?: FormInstance) {
   if (!form) {
     return;
   }
-
   try {
-    await form.validate();
+    await form.validate().then(async valid => {
+      if (!valid) {
+        return ;
+      }
+      else {
+        if (form.$props.model?.password !== form.$props.model?.passwordConfirmation) {
+          ElMessage.error( "Les mots de passe ne sont pas identiques");
+          return;
+        }
+        const usernameExists = await userApi.exists(form.$props.model?.username);
+        if (usernameExists) {
+          ElMessage.error( "Le nom d'utilisateur existe déjà");
+          return;
+        }
+        const registrationData: UserRegistrationModel = {
+          username: form.$props.model?.username,
+          password: form.$props.model?.password,
+        };
+        userApi.register(registrationData).then(() => {
+          ElMessage({
+            message: 'Votre compte a été créé',
+            type: 'success',
+          });
+          router.push('/login');
+        })
+        .catch(() => {
+          ElMessage.error( "Une erreur est survenu lors de l'inscription du compte");
+        });
+      }
+    });
   } catch (e) {
     return;
   }
@@ -59,9 +101,12 @@ async function onSubmit(form?: FormInstance) {
             <el-input v-model="registerModel.username" />
           </el-form-item>
 
-          <el-form-item label="Mot de passe" prop="password"> </el-form-item>
+          <el-form-item label="Mot de passe" prop="password">
+            <el-input v-model="registerModel.password" type="password" />
+          </el-form-item>
 
           <el-form-item label="Confirmez votre mot de passe" prop="passwordConfirmation">
+            <el-input v-model="registerModel.passwordConfirmation" type="password"/>
           </el-form-item>
 
           <el-form-item>

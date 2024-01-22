@@ -2,17 +2,19 @@
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useFormModal } from "@/app/components/ui/modal";
-import type { FormInstance, FormRules } from "element-plus";
-import { useProvider } from "@/app/platform";
+import { ElMessage, type FormInstance, type FormRules } from "element-plus";
+import { useProvider, useState} from "@/app/platform";
 import { RoomAPI } from "@/modules/room/services/RoomAPI";
 import { RoomService } from "@/modules/room/services/RoomService";
 import type { Room } from "@/modules/room/models/domain/Room";
+import { RoomStore } from "@/modules/room/store";
 
 const [roomApi, roomService] = useProvider([RoomAPI, RoomService]);
 const form = ref<FormInstance | null>(null);
 const loading = ref(false);
 const router = useRouter();
 const foundRooms = ref<Room[]>([]);
+const state = useState(RoomStore);
 
 const formRules = reactive<FormRules>({
   roomId: [
@@ -37,9 +39,29 @@ async function onSubmit(form?: FormInstance) {
 
   try {
     loading.value = true;
-    await form.validate();
-
-    hide();
+    await form.validate().then(async valid => {
+      if (!valid) {
+        return ;
+      }
+      else {
+        roomService.join(form.$props.model?.roomId).then(() => {
+          ElMessage({
+            message: "Vous avez rejoint le salon",
+            type: 'success',
+          });
+          localStorage.setItem("lastRoom", form.$props.model?.roomId);
+          router.push(form.$props.model?.roomId);
+          hide();
+        })
+        .catch(() => {
+          ElMessage({
+            message: "Une erreur s'est produite lors du chargement du salon",
+            type: 'error',
+          });
+          hide();
+        });
+      }
+    });
   } catch (e) {
     return;
   } finally {
@@ -53,7 +75,13 @@ async function onSubmit(form?: FormInstance) {
  * @param text 
  */
 async function searchRooms(text: string) {
- 
+  roomApi.search(text).then(rooms =>{
+    foundRooms.value = rooms;
+  })
+  .catch(() => {
+    ElMessage.error("Une erreur est survenue lors de la recherche");
+  })
+  // foundRooms.value = state.rooms.filter(room => room.name.includes(text));
 }
 
 defineExpose({
