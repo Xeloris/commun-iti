@@ -39,10 +39,6 @@ subscribeToIncomingMessage();
 watch(
   () => props.room,
   async () => {
-    /**
-     * Each time the room changes, fetch messages and subscribe to new messages
-     */
-    
     store.reset();
     await fetchMore();
 
@@ -51,7 +47,7 @@ watch(
 );
 
 function subscribeToIncomingMessage() {
-  // TODO
+  
 }
 
 async function fetchMore() {
