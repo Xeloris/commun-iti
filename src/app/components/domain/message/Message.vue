@@ -14,9 +14,10 @@ const props = defineProps<{
   message: Message;
 }>();
 
-const [messageSerivce] = useProvider([MessageService]);
+const [messageService] = useProvider([MessageService]);
 
 function onEmojiPicked(emoji: string) {
+  messageService.reactTo(emoji, props.message);
 }
 
 </script>
@@ -37,9 +38,10 @@ function onEmojiPicked(emoji: string) {
           {{ DateTime.fromJSDate(props.message.creationDate).toFormat("dd LLLL yyyy") }}
         </small>
         <RichText :text="props.message.text" />
+        <message-reactions :reactions="props.message.reactions"/>
       </div>
-
     </div>
+
   </div>
 </template>
 
