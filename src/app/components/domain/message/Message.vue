@@ -4,20 +4,32 @@ import BgImage from "../../ui/BgImage.vue";
 import ItiEmojiPicker from "../../ui/emoji-picker/EmojiPicker.vue";
 import EmojiIcon from "../../ui/icons/EmojiIcon.vue";
 import MessageAttachements from "./MessageAttachements.vue";
-import { useProvider } from "@/app/platform";
+import { useProvider, useState } from "@/app/platform";
 import { MessageService } from "@/modules/message/services/MessageService";
 import { DateTime } from "luxon";
 import MessageReactions, { type MessageReaction } from "./MessageReactions.vue";
-import { type Message } from "@/modules/message/models/domain";
+import { type EmojiReaction, type Message } from "@/modules/message/models/domain";
+import { AuthenticationStore } from "@/modules/authentication/store/AuthenticationStore";
 
 const props = defineProps<{
   message: Message;
 }>();
 
 const [messageService] = useProvider([MessageService]);
+const authState = useState(AuthenticationStore);
 
 function onEmojiPicked(emoji: string) {
   messageService.reactTo(emoji, props.message);
+}
+
+function handleReactionClick(reaction: EmojiReaction) {
+  if (reaction.userReactions.some(reactionUser => reactionUser.userId === authState.loggedUser?.id)) {
+    messageService.removeReaction(reaction.emoji, props.message);
+  }
+  else {
+    onEmojiPicked(reaction.emoji);
+  }
+  
 }
 
 </script>
@@ -38,7 +50,7 @@ function onEmojiPicked(emoji: string) {
           {{ DateTime.fromJSDate(props.message.creationDate).toFormat("dd LLLL yyyy") }}
         </small>
         <RichText :text="props.message.text" />
-        <message-reactions :reactions="props.message.reactions"/>
+        <message-reactions :reactions="props.message.reactions" @reactionClick="handleReactionClick"/>
       </div>
     </div>
 

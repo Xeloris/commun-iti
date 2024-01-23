@@ -35,7 +35,6 @@ const root = ref<HTMLDivElement | null>(null);
 
 subscribeToIncomingMessage();
 
-
 watch(
   () => props.room,
   async () => {
@@ -47,7 +46,9 @@ watch(
 );
 
 function subscribeToIncomingMessage() {
-  messageSocket.onNewMessage(props.room.id, () => {})
+  messageSocket.onNewMessage(props.room.id, () => {
+    messageSerivce.reloadMessages();
+  })
 }
 
 async function fetchMore() {
@@ -66,6 +67,7 @@ async function fetchMore() {
     loading.value = false;
   }
 }
+
 </script>
 
 <template>
