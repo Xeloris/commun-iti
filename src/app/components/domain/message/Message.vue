@@ -10,7 +10,6 @@ import { DateTime } from "luxon";
 import MessageReactions, { type MessageReaction } from "./MessageReactions.vue";
 import { type EmojiReaction, type Message } from "@/modules/message/models/domain";
 import { AuthenticationStore } from "@/modules/authentication/store/AuthenticationStore";
-import { type Message } from "@/modules/message/models/domain";
 import ImageAttachement from "@/app/components/domain/message/attachements/ImageAttachement.vue";
 import VideoAttachement from "@/app/components/domain/message/attachements/VideoAttachement.vue";
 import YoutubeAttachement from "@/app/components/domain/message/attachements/YoutubeAttachement.vue";
@@ -55,7 +54,6 @@ function handleReactionClick(reaction: EmojiReaction) {
         </small>
         <RichText :text="props.message.text" />
         <message-reactions :reactions="props.message.reactions" @reactionClick="handleReactionClick"/>
-        <message-reactions :reactions="props.message.reactions"/>
         <li v-for="attachment in props.message.attachements" :key="attachment.type">
           <ImageAttachement v-if="attachment.type === 'image'" :src="attachment.src"/>
           <VideoAttachement v-if="attachment.type === 'video'" :src="attachment.src"/>
