@@ -26,7 +26,7 @@ if (authState.token?.bearer) {
 
     <main>
       <main>
-        <room v-if="store.state.currentRoom" :room="store.state.currentRoom" />
+        <router-view />
       </main>
 
       <footer>
