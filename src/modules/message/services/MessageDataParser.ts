@@ -1,8 +1,10 @@
 import { inject, injectable } from "inversify";
 import type {
+  ImageMessageAttachement,
   Message,
   MessageAttachement,
   RichText,
+  RichMessage,
 } from "../models/domain";
 import type { MessageData } from "../models/MessageData";
 import { HtmlOgParser } from "@/modules/infrastructure/HtmlOgParser";
@@ -46,6 +48,22 @@ export class MessageDataParser {
 
     for (const token of text.tokens) {
       if (token.type !== "link") continue;
+      if (pictureRegex.test(token.value)) {
+        attachements.push({ type: "image", src: token.value });
+        continue;
+      }
+
+      if (videoRegex.test(token.value)) {
+        attachements.push({ type: "video", src: token.value });
+        continue;
+      }
+      if (audioRegex.test(token.value)) {
+        attachements.push({ type: "audio", src: token.value });
+        continue;
+      }
+      if (youtubeRegex.test(token.value)) {
+        attachements.push({ type: "youtube", videoId: token.value, domain: "" });
+      }
 
     }
 

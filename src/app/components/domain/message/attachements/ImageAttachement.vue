@@ -8,7 +8,7 @@ defineProps({
 </script>
 <template>
   <div class="image-attachement light-card">
-    <!-- TODO -->
+    <img alt="" :src="$props.src"/>
   </div>
 </template>
 <style lang="scss" scoped>

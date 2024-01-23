@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <div class="video-attachement light-card">
-        <!-- TODO -->
+        <video :src="$props.src"></video>
   </div>
 </template>
 
