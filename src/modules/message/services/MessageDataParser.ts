@@ -43,7 +43,12 @@ export class MessageDataParser {
       /(http[s]?:\/\/)?www\.(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/im;
 
     const attachements: MessageAttachement[] = [];
-    // TODO
+
+    for (const token of text.tokens) {
+      if (token.type !== "link") continue;
+
+    }
+
     return attachements;
   }
 }

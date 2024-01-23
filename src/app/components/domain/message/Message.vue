@@ -34,9 +34,7 @@ function onEmojiPicked(emoji: string) {
       <div class="message-title">
         <span> {{ props.message.author.username + " " }} </span>
         <small class="message-date">
-          {{ props.message.creationDate.getDate() }}
-          {{ props.message.creationDate.toLocaleString('default', { month: 'long' }) }}
-          {{ props.message.creationDate.getFullYear() }}
+          {{ DateTime.fromJSDate(props.message.creationDate).toFormat("dd LLLL yyyy") }}
         </small>
         <RichText :text="props.message.text" />
       </div>

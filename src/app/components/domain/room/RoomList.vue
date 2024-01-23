@@ -22,19 +22,19 @@ watchEffect(() => {
     if (localStorage.getItem("lastRoom")!) {
       roomApi.findById(localStorage.getItem("lastRoom")!).then(room => {
         selectRoom(room!);
-        router.push('app/room/' + room!.id);
+        router.replace('app/room/' + room!.id);
         redirectionDone.value = true;
-        return ;
+        return;
       })
     }
     const firstRoom = state.rooms[0];
     if (state.currentRoom === undefined && firstRoom) {
       selectRoom(firstRoom);
-      router.push('app/room/' + firstRoom.id);
+      router.replace('app/room/' + firstRoom.id);
     }
     redirectionDone.value = true;
   }
-  
+
 });
 </script>
 
@@ -56,12 +56,13 @@ watchEffect(() => {
 
 .room-list {
   padding-top: 1px;
-  > ul {
+
+  >ul {
     margin: 0;
     list-style-type: none;
     padding-inline: 0;
 
-    > li {
+    >li {
       margin: 0;
       text-decoration: none;
       display: block;

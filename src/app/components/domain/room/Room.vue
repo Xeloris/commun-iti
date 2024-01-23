@@ -47,7 +47,9 @@ watch(
 );
 
 function subscribeToIncomingMessage() {
-
+  messageSocket.onNewMessage(props.room.id, post => {
+    store.prependMessage(post);
+  })
 }
 
 async function fetchMore() {
@@ -71,7 +73,7 @@ async function fetchMore() {
 <template>
   <div class="room stretch-wh" ref="root">
     <div class="room-container" ref="container">
-      <Message v-for="item in store.state.currentRoomMessages" :key="item.id" :message="item" />
+      <Message v-for="item in state.currentRoomMessages" :key="item.id" :message="item" />
       <div ref="top">
       </div>
     </div>

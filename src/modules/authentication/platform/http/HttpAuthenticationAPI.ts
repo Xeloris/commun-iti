@@ -21,6 +21,7 @@ export class HttpAuthenticationAPI extends AuthenticationAPI {
         }
       };
     } catch (e) {
+      console.log(e);
       return null;
     }
   }
