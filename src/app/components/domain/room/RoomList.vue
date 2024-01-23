@@ -22,7 +22,7 @@ watchEffect(() => {
     if (localStorage.getItem("lastRoom")!) {
       roomApi.findById(localStorage.getItem("lastRoom")!).then(room => {
         selectRoom(room!);
-        router.replace('app/room/' + room!.id);
+        router.replace('/app/room/' + room!.id);
         redirectionDone.value = true;
         return;
       })
@@ -30,7 +30,7 @@ watchEffect(() => {
     const firstRoom = state.rooms[0];
     if (state.currentRoom === undefined && firstRoom) {
       selectRoom(firstRoom);
-      router.replace('app/room/' + firstRoom.id);
+      router.replace('/app/room/' + firstRoom.id);
     }
     redirectionDone.value = true;
   }

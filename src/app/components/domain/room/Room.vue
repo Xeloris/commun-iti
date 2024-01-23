@@ -47,9 +47,7 @@ watch(
 );
 
 function subscribeToIncomingMessage() {
-  messageSocket.onNewMessage(props.room.id, post => {
-    store.prependMessage(post);
-  })
+  messageSocket.onNewMessage(props.room.id, () => {})
 }
 
 async function fetchMore() {
