@@ -41,9 +41,16 @@ watch(
     store.reset();
     await fetchMore();
 
-    roomSocket.onRoomJoined(() => {
-      ElNotification({ message: "Quelqu'un a rejoint un salon", type: "info"});
-    })
+    roomSocket.onRoomJoined((reaction) => {
+     this.$notify({
+      title: 'Notification',
+      message: "Quelqu'un a rejoint un salon",
+      type: 'info'
+      });
+    });
+
+
+    ElNotification({ message: "Quelqu'un a rejoint un salon", type: "info"});
 
     subscribeToIncomingMessage();
   },
