@@ -8,6 +8,7 @@ import { useProvider } from "@/app/platform";
 import { UserAPI } from "@/modules/user/services";
 import { AuthenticationService } from "@/modules/authentication/services";
 import { MessageService } from "@/modules/message/services/MessageService";
+import type { UpdateUserModel } from "@/modules/user/models";
 
 const [userApi, authService, messageService] = useProvider([
   UserAPI,
@@ -79,9 +80,26 @@ async function onSubmit(form?: FormInstance) {
   }
 
   try {
+    const isValid = await form.validate();
+
+    if (!isValid) {
+      return;
+    }
+
     isLoading.value = true;
 
-    // TODO
+    const { username, picture} = formModel.value;
+
+    const userData: UpdateUserModel = {
+      username,
+      picture: picture ? new File([picture], picture.name, { type: picture.type }) : null,
+    };
+
+    // Update user information on the server
+    await userApi.update(userData);
+
+    // Refresh user information and other relevant data
+    await refreshData();
         
     hide();
   } catch (e) {
