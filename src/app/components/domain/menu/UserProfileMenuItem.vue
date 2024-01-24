@@ -33,7 +33,7 @@ function logout() {
 
     <div class="user-profile-actions">
       <el-button :icon="SwitchButton" type="danger" size="default" @click="logout()" />
-      
+      <el-button :icon="SwitchButton" type="" size="default" @click="logout()" />
     </div>
   </div>
 </template>
