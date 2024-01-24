@@ -35,6 +35,20 @@ const root = ref<HTMLDivElement | null>(null);
 
 subscribeToIncomingMessage();
 
+
+messageSocket.onNewReaction((reaction) => {
+  if (reaction.message.author == authState.loggedUser) {
+    this.$notify({
+      title: 'Notification',
+      message: `${reaction.user.username} a reagit a un de vos message`,
+      type: 'info'
+    });
+  }
+
+  messageSerivce.reloadMessages();
+});
+
+
 watch(
   () => props.room,
   async () => {
@@ -48,9 +62,6 @@ watch(
       type: 'info'
       });
     });
-
-
-    ElNotification({ message: "Quelqu'un a rejoint un salon", type: "info"});
 
     subscribeToIncomingMessage();
   },

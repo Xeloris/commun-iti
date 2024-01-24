@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import BgImage from "@/app/components/ui/BgImage.vue";
 import { ElMessageBox } from "element-plus";
-import { SwitchButton } from "@element-plus/icons-vue";
+import { SwitchButton, Message } from "@element-plus/icons-vue";
 import { AuthenticationStore } from "@/modules/authentication/store/AuthenticationStore";
 import { useProvider, useState } from "@/app/platform";
 import { AuthenticationService } from "@/modules/authentication/services";
-
+import { useRightMenuState } from "@/app/components/domain/menu/useRightMenu";
 const state = useState(AuthenticationStore);
 const [authService] = useProvider([AuthenticationService]);
 
@@ -21,6 +21,10 @@ function logout() {
     })
     .catch(() => {});
 }
+
+function toggleRightMenu() {
+  useRightMenuState().toggle();
+}
 </script>
 
 <template>
@@ -33,7 +37,7 @@ function logout() {
 
     <div class="user-profile-actions">
       <el-button :icon="SwitchButton" type="danger" size="default" @click="logout()" />
-      <el-button :icon="SwitchButton" type="" size="default" @click="logout()" />
+      <el-button :icon="Message" type="info" size="default" @click="toggleRightMenu()" />
     </div>
   </div>
 </template>
