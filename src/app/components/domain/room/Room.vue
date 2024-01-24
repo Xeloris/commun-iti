@@ -37,12 +37,8 @@ subscribeToIncomingMessage();
 
 
 messageSocket.onNewReaction((reaction) => {
-  if (reaction.message.author == authState.loggedUser) {
-    this.$notify({
-      title: 'Notification',
-      message: `${reaction.user.username} a reagit a un de vos message`,
-      type: 'info'
-    });
+  if (reaction.message.author.id === authState.loggedUser?.id) {
+    ElNotification({ message: `${reaction.user.username} a reagit a un de vos message`, type: "info"});
   }
 
   messageSerivce.reloadMessages();

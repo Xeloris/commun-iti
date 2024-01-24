@@ -5,9 +5,9 @@ import { SwitchButton, UserFilled, Message } from "@element-plus/icons-vue";
 import { AuthenticationStore } from "@/modules/authentication/store/AuthenticationStore";
 import { useProvider, useState } from "@/app/platform";
 import { AuthenticationService } from "@/modules/authentication/services";
+import { useRightMenuState } from "@/app/components/domain/menu/useRightMenu";
 import { ref } from "vue";
 import EditUserProfileModal from "../user/EditUserProfileModal.vue"
-import { useRightMenuState } from "@/app/components/domain/menu/useRightMenu";
 
 const state = useState(AuthenticationStore);
 const [authService] = useProvider([AuthenticationService]);
@@ -50,7 +50,6 @@ function toggleRightMenu() {
     <div class="user-profile-actions">
       <el-button :icon="SwitchButton" type="danger" size="default" @click="logout()" />
       <el-button :icon="Message" type="info" size="default" @click="toggleRightMenu()" />
-      <el-button :icon="SwitchButton" type="" size="default" @click="logout()" />
       <el-button :icon="UserFilled" type="" size="default" @click="openUserProfileModal" />
       <EditUserProfileModal ref="editUserProfileModal" />
     </div>
