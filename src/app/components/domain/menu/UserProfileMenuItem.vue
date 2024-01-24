@@ -1,13 +1,25 @@
 <script lang="ts" setup>
 import BgImage from "@/app/components/ui/BgImage.vue";
 import { ElMessageBox } from "element-plus";
-import { SwitchButton, Message } from "@element-plus/icons-vue";
+import { SwitchButton, UserFilled, Message } from "@element-plus/icons-vue";
 import { AuthenticationStore } from "@/modules/authentication/store/AuthenticationStore";
 import { useProvider, useState } from "@/app/platform";
 import { AuthenticationService } from "@/modules/authentication/services";
+import { ref } from "vue";
+import EditUserProfileModal from "../user/EditUserProfileModal.vue"
 import { useRightMenuState } from "@/app/components/domain/menu/useRightMenu";
+
 const state = useState(AuthenticationStore);
 const [authService] = useProvider([AuthenticationService]);
+
+const editUserProfileModal = ref<InstanceType<typeof EditUserProfileModal>>();
+
+async function openUserProfileModal() {
+  if (state.loggedUser) {
+    const user = state.loggedUser;
+    await editUserProfileModal.value?.show({username: user.username, pictureUrl: user.pictureUrl, picture: null});
+  }
+}
 
 function logout() {
   ElMessageBox.confirm("Souhaitez-vous vous déconnecter de la session actuelle ?", "Warning", {
@@ -38,6 +50,9 @@ function toggleRightMenu() {
     <div class="user-profile-actions">
       <el-button :icon="SwitchButton" type="danger" size="default" @click="logout()" />
       <el-button :icon="Message" type="info" size="default" @click="toggleRightMenu()" />
+      <el-button :icon="SwitchButton" type="" size="default" @click="logout()" />
+      <el-button :icon="UserFilled" type="" size="default" @click="openUserProfileModal" />
+      <EditUserProfileModal ref="editUserProfileModal" />
     </div>
   </div>
 </template>
