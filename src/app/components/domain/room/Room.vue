@@ -78,7 +78,6 @@ async function fetchMore() {
     loading.value = true;
 
     await messageSerivce.fetchMore(props.room.id);
-    console.log(store.state.messagesPagination);
   } catch (e) {
     console.error(e);
   } finally {
