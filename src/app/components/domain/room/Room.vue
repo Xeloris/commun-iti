@@ -78,6 +78,7 @@ async function fetchMore() {
     loading.value = true;
 
     await messageSerivce.fetchMore(props.room.id);
+    console.log(store.state.messagesPagination);
   } catch (e) {
     console.error(e);
   } finally {
@@ -88,11 +89,13 @@ async function fetchMore() {
 const { stop } = useIntersectionObserver(
   top,
   ([{ isIntersecting }], observerElement) => {
-    if (isIntersecting && state.messagesPagination.page != 0) {
-      fetchMore();
-    }
-    else {
-      stop();
+    if (isIntersecting) {
+      if (state.messagesPagination.page + 1 < state.messagesPagination.total / state.messagesPagination.perPage) {
+        fetchMore();
+      }
+      else {
+        stop();
+      }
     }
   },
 )
