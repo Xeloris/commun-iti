@@ -14,6 +14,10 @@ defineProps<{
   <div class="message-attachements">
     <template v-for="(attachement, i) in attachements" :key="i">
       <!-- TODO -->
+      attachement.type === "image" && <ImageAttachement :src="attachement.src" />
+      attachement.type === "video" && <VideoAttachement :src="attachement.src" />
+      attachement.type === "youtube" && <YoutubeAttachement :attachement="attachement" />
+      attachement.type === "website" && <WebsiteAttachement :attachement="attachement" />
     </template>
   </div>
 </template>

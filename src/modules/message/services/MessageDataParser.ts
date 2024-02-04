@@ -62,9 +62,11 @@ export class MessageDataParser {
         continue;
       }
       if (youtubeRegex.test(token.value)) {
-        attachements.push({ type: "youtube", videoId: token.value, domain: "" });
+        attachements.push({ type: "youtube", videoId: token.value.split("youtube.com/")[1], domain: "https://www.youtube.com/embed/" });
+        continue;
       }
 
+      attachements.push({ type: "website", url: token.value });
     }
 
     return attachements;

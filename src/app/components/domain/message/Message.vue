@@ -13,6 +13,7 @@ import { AuthenticationStore } from "@/modules/authentication/store/Authenticati
 import ImageAttachement from "@/app/components/domain/message/attachements/ImageAttachement.vue";
 import VideoAttachement from "@/app/components/domain/message/attachements/VideoAttachement.vue";
 import YoutubeAttachement from "@/app/components/domain/message/attachements/YoutubeAttachement.vue";
+import WebsiteAttachement from "@/app/components/domain/message/attachements/WebsiteAttachement.vue";
 
 const props = defineProps<{
   message: Message;
@@ -57,7 +58,8 @@ function handleReactionClick(reaction: EmojiReaction) {
         <li v-for="attachment in props.message.attachements" :key="attachment.type">
           <ImageAttachement v-if="attachment.type === 'image'" :src="attachment.src"/>
           <VideoAttachement v-if="attachment.type === 'video'" :src="attachment.src"/>
-          <YoutubeAttachement  v-if="attachment.type === 'youtube'" :attachement="attachment"/>
+          <YoutubeAttachement v-if="attachment.type === 'youtube'" :attachement="attachment"/>
+          <WebsiteAttachement v-if="attachment.type === 'website'" :attachement="attachment"/>
         </li>
       </div>
     </div>
